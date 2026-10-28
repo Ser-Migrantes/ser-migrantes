@@ -1,0 +1,64 @@
+{
+  "name": "Solicitud",
+  "type": "object",
+  "properties": {
+    "nombre": {
+      "type": "string",
+      "description": "Nombre o alias de la persona"
+    },
+    "email": {
+      "type": "string",
+      "description": "Correo de contacto",
+      "format": "email"
+    },
+    "telefono": {
+      "type": "string",
+      "description": "Tel\u00e9fono opcional"
+    },
+    "necesidad": {
+      "type": "string",
+      "description": "Motivo de contacto y situaci\u00f3n contada por la persona"
+    },
+    "microrelato_origen": {
+      "type": "string",
+      "description": "Slug del relato desde el que lleg\u00f3 la solicitud"
+    },
+    "servicio_interes": {
+      "type": "string",
+      "description": "Servicio sobre el que pregunta"
+    },
+    "consentimiento": {
+      "type": "boolean",
+      "description": "Aceptaci\u00f3n del tratamiento de datos para responder la consulta"
+    },
+    "fecha": {
+      "type": "string",
+      "description": "Fecha y hora de env\u00edo",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "nombre",
+    "email",
+    "necesidad",
+    "consentimiento"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

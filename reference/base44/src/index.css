@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Paleta de marca */
+    --crema: 45 100% 97%;
+    --crema-alta: 45 100% 93%;
+    --turquesa: 177 98% 34%;
+    --mostaza: 43 94% 61%;
+    --tinta: 68 50% 7%;
+
+    /* Tokens semánticos reutilizables */
+    --fondo: 0 0% 100%;              /* fondo base de la web: blanco */
+    --superficie: 0 0% 100%;         /* tarjetas y superficies elevadas */
+    --superficie-suave: 45 100% 96%; /* crema claro para bandas acentuadas */
+    --primario: 182 92% 24%;         /* turquesa (texto y botones) */
+    --primario-suave: 45 100% 93%;
+    --secundario: 184 96% 15%;       /* turquesa oscuro (titulares y hover) */
+    --acento: 43 94% 61%;            /* mostaza */
+    --texto: 68 50% 7%;
+    --texto-suave: 70 14% 31%;
+
+    --background: 0 0% 100%;
+    --foreground: 68 50% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 68 50% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 68 50% 7%;
+    --primary: 182 92% 24%;
+    --primary-foreground: 45 100% 98%;
+    --secondary: 45 100% 93%;
+    --secondary-foreground: 68 50% 12%;
+    --muted: 45 40% 94%;
+    --muted-foreground: 70 14% 32%;
+    --accent: 43 94% 61%;
+    --accent-foreground: 68 50% 10%;
+    --destructive: 0 70% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 45 30% 88%;
+    --input: 45 28% 86%;
+    --ring: 182 92% 30%;
+    --chart-1: 182 92% 24%;
+    --chart-2: 184 96% 15%;
+    --chart-3: 43 94% 61%;
+    --chart-4: 177 60% 45%;
+    --chart-5: 68 50% 20%;
+    --radius: 1.5rem;
+
+    --font-heading: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .dark {
+    --fondo: 65 25% 8%;
+    --superficie: 65 22% 12%;
+    --superficie-suave: 45 12% 14%;
+    --primario: 177 75% 55%;
+    --primario-suave: 182 30% 18%;
+    --secundario: 184 80% 62%;
+    --texto: 45 60% 95%;
+    --texto-suave: 45 25% 78%;
+
+    --background: 65 25% 8%;
+    --foreground: 45 60% 95%;
+    --card: 65 22% 12%;
+    --card-foreground: 45 60% 95%;
+    --popover: 65 22% 12%;
+    --popover-foreground: 45 60% 95%;
+    --primary: 177 75% 55%;
+    --primary-foreground: 65 25% 8%;
+    --secondary: 182 30% 18%;
+    --secondary-foreground: 45 60% 95%;
+    --muted: 65 18% 18%;
+    --muted-foreground: 45 30% 76%;
+    --accent: 43 94% 61%;
+    --accent-foreground: 68 50% 10%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 65 15% 24%;
+    --input: 65 15% 24%;
+    --ring: 177 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-fondo font-body text-texto antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: hsl(var(--mostaza));
+    color: hsl(var(--tinta));
+  }
+
+  :focus-visible {
+    outline: 3px solid hsl(var(--primario));
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer utilities {
+  .contenedor {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 md:px-8;
+  }
+
+  .seccion {
+    @apply py-16 md:py-24;
+  }
+
+  .etiqueta {
+    @apply text-[0.72rem] font-semibold uppercase tracking-[0.16em];
+  }
+
+  /* Lectura cómoda: máximo ~70 caracteres por línea */
+  .prosa-lectura {
+    max-width: 68ch;
+  }
+
+  .prosa-lectura p + p {
+    margin-top: 1.35rem;
+  }
+
+  /* Aparición gradual al hacer scroll (respeta "reducir movimiento") */
+  .revelar {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .revelar-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .revelar {
+    opacity: 1;
+    transform: none;
+  }
+}

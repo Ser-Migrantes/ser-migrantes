@@ -1,0 +1,1 @@
+<!-- Supabase y Vercel (leer solo al desplegar) -->

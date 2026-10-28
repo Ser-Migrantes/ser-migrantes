@@ -1,0 +1,84 @@
+{
+  "name": "Pregunta",
+  "type": "object",
+  "properties": {
+    "pregunta": {
+      "type": "string",
+      "description": "Pregunta visible, escrita desde la perspectiva de la persona migrante"
+    },
+    "respuesta": {
+      "type": "string",
+      "description": "Respuesta breve y clara"
+    },
+    "casuistica": {
+      "type": "string",
+      "description": "Tema principal de la pregunta",
+      "enum": [
+        "Regularizaci\u00f3n y arraigo",
+        "Documentaci\u00f3n y NIE",
+        "Empleo y trabajo",
+        "Vivienda",
+        "Estudios y formaci\u00f3n",
+        "Familia y reagrupaci\u00f3n",
+        "Salud y bienestar",
+        "Idioma y cultura"
+      ]
+    },
+    "etiquetas": {
+      "type": "array",
+      "description": "Temas asociados para b\u00fasqueda",
+      "items": {
+        "type": "string"
+      }
+    },
+    "microrelatos_asociados": {
+      "type": "array",
+      "description": "Slugs de los microrelatos relacionados",
+      "items": {
+        "type": "string"
+      }
+    },
+    "estado": {
+      "type": "string",
+      "description": "Borrador o publicado",
+      "enum": [
+        "publicado",
+        "borrador"
+      ],
+      "default": "borrador"
+    }
+  },
+  "required": [
+    "pregunta",
+    "respuesta"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.estado": "publicado"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

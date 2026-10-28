@@ -1,0 +1,112 @@
+{
+  "name": "Microrelato",
+  "type": "object",
+  "properties": {
+    "titulo": {
+      "type": "string",
+      "description": "T\u00edtulo p\u00fablico del relato, orientado a b\u00fasqueda"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL amigable e identificador p\u00fablico del relato"
+    },
+    "resumen": {
+      "type": "string",
+      "description": "Extracto breve que aparece en listados y buscador"
+    },
+    "contenido": {
+      "type": "string",
+      "description": "Relato adaptado completo. Los p\u00e1rrafos se separan con una l\u00ednea en blanco"
+    },
+    "casuistica": {
+      "type": "string",
+      "description": "Tema o situaci\u00f3n principal del relato",
+      "enum": [
+        "Regularizaci\u00f3n y arraigo",
+        "Documentaci\u00f3n y NIE",
+        "Empleo y trabajo",
+        "Vivienda",
+        "Estudios y formaci\u00f3n",
+        "Familia y reagrupaci\u00f3n",
+        "Salud y bienestar",
+        "Idioma y cultura"
+      ]
+    },
+    "perfil": {
+      "type": "string",
+      "description": "Perfil aproximado de la persona protagonista",
+      "enum": [
+        "Reci\u00e9n llegada/o",
+        "Familia",
+        "Estudiante",
+        "Trabajador/a",
+        "Emprendedor/a",
+        "Persona refugiada"
+      ]
+    },
+    "etiquetas": {
+      "type": "array",
+      "description": "Temas de b\u00fasqueda y SEO",
+      "items": {
+        "type": "string"
+      }
+    },
+    "estado": {
+      "type": "string",
+      "description": "Borrador o publicado",
+      "enum": [
+        "publicado",
+        "borrador"
+      ],
+      "default": "borrador"
+    },
+    "fecha_publicacion": {
+      "type": "string",
+      "description": "Fecha de publicaci\u00f3n",
+      "format": "date"
+    },
+    "cta_principal": {
+      "type": "string",
+      "description": "Texto del bot\u00f3n principal de la ficha"
+    },
+    "servicio_relacionado": {
+      "type": "string",
+      "description": "Nombre del servicio sugerido al final del relato"
+    }
+  },
+  "required": [
+    "titulo",
+    "resumen",
+    "contenido",
+    "casuistica"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.estado": "publicado"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
