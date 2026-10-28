@@ -2,27 +2,22 @@
 
 # TASKS — Fase en curso
 
-**Fase actual:** 0 — Preparación y scaffolding
-**Objetivo:** app Next.js + TS + Tailwind funcionando en local y subida a GitHub, con Base44 (código, tablas y CSV) y el logo guardados como referencia.
+**Fase actual:** 1 — Análisis de Base44
+**Objetivo:** documento `docs/BASE44_ANALYSIS.md` aprobado, con todo lo necesario para migrar el diseño y los datos de Base44 a Next.js + Supabase.
 
 ## Antes de empezar (lo hago yo)
-- [ ] Copiar el código React de Base44 a `reference/base44/` (sin `node_modules`, `.env*`, `.git`)
-- [ ] Copiar los 4 CSV a `reference/base44/` (Microrelato, Pregunta, Servicio, Evento)
-- [ ] Guardar `reference/base44/tablas.md`
-- [ ] Renombrar `CLAUDE.md`, `AGENTS.md` y `README.md` de Base44 a `.txt`
-- [ ] Guardar el logo PNG en `reference/brand/logo.png`
-- [ ] Guardar el texto de la política de privacidad de Base44 (si existe) en `reference/base44/privacidad.md`
+- [ ] (Opcional) Guardar el texto de la política de privacidad de Base44, si existe, en `reference/base44/privacidad.md`
 
 ## Tareas para Claude
-1. [ ] En modo plan, proponer cómo crear la app Next.js en la raíz del repo (sin subcarpeta extra) y esperar mi aprobación.
-2. [ ] Crear la app con TypeScript, Tailwind, ESLint, App Router y alias `@/*`.
-3. [ ] Añadir script `typecheck` (`tsc --noEmit`) y revisar `lint`.
-4. [ ] Verificar `.gitignore` (`.env*`, `node_modules`, `.next`) y crear `.env.example` sin valores.
-5. [ ] Crear la estructura de carpetas de `CLAUDE.md` con archivos mínimos y copiar el logo a `public/`.
-6. [ ] Página inicial provisional con el texto "Ser Migrantes".
-7. [ ] Ejecutar `dev`, `build`, `lint` y `typecheck` y mostrarme el resultado.
-8. [ ] Proponer mensaje de commit; commit y push solo si lo apruebo.
+1. [ ] En modo plan, proponer la estructura de `docs/BASE44_ANALYSIS.md` y esperar mi aprobación.
+2. [ ] Inventario de pantallas y componentes de `reference/base44/src`.
+3. [ ] Extraer paleta, tipografías y estilos reales (valores exactos para tokens Tailwind).
+4. [ ] Listar las llamadas al SDK (`entities.*`, `auth.*`, `integrations.*`) y su equivalente en Supabase.
+5. [ ] Contrastar `reference/base44/tablas.md` y los CSV con `docs/PRD.md` §7.
+6. [ ] Marcar como "no confirmado" todo campo o relación que no se pueda verificar desde el código o los CSV.
+7. [ ] NO generar datos de ejemplo: los CSV ya contienen los datos de arranque.
+8. [ ] Registrar en `docs/DECISIONS.md` y proponer commit; commit y push solo si lo apruebo.
 
 ## Al terminar
-- [ ] Marcar la Fase 0 en `docs/PLAN.md`
-- [ ] Reescribir este archivo con las tareas de la Fase 1
+- [ ] Marcar la Fase 1 en `docs/PLAN.md`
+- [ ] Reescribir este archivo con las tareas de la Fase 2

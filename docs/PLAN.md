@@ -6,11 +6,11 @@ Leyenda: [ ] pendiente · [x] hecho. Una fase cada vez; el detalle de la fase en
 Estado actual: **Fase 0**
 
 ## Fase 0 — Preparación y scaffolding
-- [ ] Material de Base44 en `reference/base44/`: código React (sin `node_modules`, `.env*`, `.git`), `tablas.md` y los 4 CSV
-- [ ] `CLAUDE.md`/`AGENTS.md`/`README.md` de Base44 renombrados a `.txt`
-- [ ] Logo PNG en `reference/brand/` y copia en `public/`
-- [ ] Crear app Next.js + TS + Tailwind + App Router en la raíz
-- [ ] Scripts `typecheck` y `lint`; `.gitignore` con `.env*`; `.env.example`
+- [x] Material de Base44 en `reference/base44/`: código React (sin `node_modules`, `.env*`, `.git`), `tablas.md` y los 4 CSV
+- [x] `CLAUDE.md`/`AGENTS.md`/`README.md` de Base44 renombrados a `.txt`
+- [x] Logo PNG en `reference/brand/` y copia en `public/`
+- [x] Crear app Next.js + TS + Tailwind + App Router en la raíz
+- [x] Scripts `typecheck` y `lint`; `.gitignore` con `.env*`; `.env.example`
 - [ ] Commit y push
 **Hecha cuando:** `dev`, `build`, `lint` y `typecheck` pasan.
 
