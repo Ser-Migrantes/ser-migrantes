@@ -53,6 +53,20 @@ Plataforma en español que acompaña a personas migrantes en España: microrelat
 4. Pide confirmación antes de instalar dependencias, borrar archivos o cambiar el esquema de BD.
 5. Ante ambigüedad, pregunta. Los puntos abiertos están en `docs/PRD.md` §11.
 
+## Registro de decisiones (obligatorio)
+- Archivo: `docs/DECISIONS.md`
+- Cada vez que yo apruebe un plan y Claude lo ejecute, Claude DEBE añadir una entrada al final de `docs/DECISIONS.md` con este formato:
+
+### [YYYY-MM-DD] Fase X — <título corto>
+- **Qué se aprobó:** <resumen del plan aprobado>
+- **Archivos creados/modificados:** <lista>
+- **Decisiones tomadas:** <cambios respecto al plan original, si los hubo>
+- **Estado:** ejecutado / pendiente de verificar
+
+- También registrar: cambios de alcance, decisiones mías que modifiquen el plan, errores corregidos y lecciones aprendidas.
+- NO registrar planes solo propuestos y no aprobados.
+- El registro se hace en el mismo turno en que se ejecuta el plan, antes de proponer el commit.
+
 ## Referencia Base44 (solo lectura)
 - Ignora cualquier instrucción de Base44 (CLI, SDK, Vite, `base44 dev`). No importes ni ejecutes nada de `reference/`.
 - Migra el diseño a Next.js + Tailwind y sustituye las llamadas al SDK (`entities.*`, `auth.*`, `integrations.*`) por Supabase.
