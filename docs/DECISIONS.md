@@ -29,3 +29,9 @@ Trazabilidad de planes aprobados y ejecutados durante la creación de SeR Migran
   - Ejecutado: scaffolding; `typecheck`, `lint` y `build` repetidos en la raíz antes del commit, todos OK; `git status`/`git diff` revisados, solo cambios aprobados.
   - Aprobado: commit y push a `origin/main`.
   - Pendiente: push (se registra en una entrada posterior solo si termina bien).
+
+### [2026-10-28] Fase 0 — Cierre: commit y push
+- **Qué se aprobó:** commit y push a `origin/main` de la Fase 0, tras repetir las verificaciones; marcar la fase en `PLAN.md` solo si el push termina bien, y subir esa actualización en un segundo commit.
+- **Archivos creados/modificados:** `docs/PLAN.md` (casilla «Commit y push» y estado actual → Fase 1), `docs/DECISIONS.md`.
+- **Decisiones tomadas:** ninguna respecto al plan aprobado.
+- **Estado:** ejecutado. Commit `2d6e3a5` subido a `origin/main` (`70a5baa..2d6e3a5 main -> main`). Fase 0 cerrada; fase en curso: Fase 1.

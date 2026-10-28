@@ -3,7 +3,7 @@
 # PLAN — Ser Migrantes MVP
 
 Leyenda: [ ] pendiente · [x] hecho. Una fase cada vez; el detalle de la fase en curso está en `docs/TASKS.md`.
-Estado actual: **Fase 0**
+Estado actual: **Fase 1**
 
 ## Fase 0 — Preparación y scaffolding
 - [x] Material de Base44 en `reference/base44/`: código React (sin `node_modules`, `.env*`, `.git`), `tablas.md` y los 4 CSV
@@ -11,7 +11,7 @@ Estado actual: **Fase 0**
 - [x] Logo PNG en `reference/brand/` y copia en `public/`
 - [x] Crear app Next.js + TS + Tailwind + App Router en la raíz
 - [x] Scripts `typecheck` y `lint`; `.gitignore` con `.env*`; `.env.example`
-- [ ] Commit y push
+- [x] Commit y push
 **Hecha cuando:** `dev`, `build`, `lint` y `typecheck` pasan.
 
 ## Fase 1 — Análisis de Base44
