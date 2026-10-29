@@ -77,14 +77,9 @@ Los 4 servicios se cargan por migración de inserción (desde `reference/base44/
 
 Etiquetas visibles en la UI: "Aliado de confianza", "Servicio propio – ServiR Migrantes", "Colaborador".
 
-**Modelo comercial (dato interno, PROVISIONAL, no confirmado).** Valores de `comision_modelo` en Base44. Se conservan, pero **no se publican ni pueden ser accesibles con la clave pública**: no basta con ocultarlos en la interfaz. Se guardan en la tabla privada `servicios_comisiones` (§7); cómo cargarlos sin dejarlos en el repositorio se detalla en `DATA_MODEL.md` (Fase 2).
-
-| Servicio | Proveedor | Modelo comercial (Base44) |
-|---|---|---|
-| Acompañamiento y traducción | Red de intérpretes | Servicio por horas a través de red aliada. |
-| Gestión documental | Gestorías colaboradoras | Derivación con comisión acordada por expediente. |
-| Orientación laboral | ServiR Migrantes | Servicio propio, sin comisión externa. |
-| Plataforma de extranjería | Wellcomy | Servicio del mismo grupo, comisionado internamente a través de Ser Migrantes. |
+**Modelo comercial (dato interno, PROVISIONAL, no confirmado).** Los valores de `comision_modelo` de Base44 se conservan, pero **no se publican ni pueden ser accesibles con la clave pública**: no basta con ocultarlos en la interfaz.
+- Se guardan en la tabla privada `servicios_comisiones` (§7).
+- **Nota:** los valores **no figuran en este documento**. Residen en el archivo local privado `supabase/private/servicios_comisiones.sql`, ignorado por Git, que nunca se sube a GitHub. Su fuente actual es `reference/base44/Servicio_export.csv`, con datos de prueba.
 
 
 ## 6. Formulario de contacto
@@ -115,7 +110,7 @@ Estructura de `microrelatos` y `faqs`: **aprobada** el 29/10/2026 (`docs/BASE44_
 
 **servicios** (estructura **aprobada**, `docs/BASE44_ANALYSIS.md` §5.3): id, nombre (único), descripcion, tipo ('aliado'|'propio'|'colaborador'), proveedor, url_destino (nullable), orden, estado ('activo'|'inactivo'). Tabla pública (solo lectura de activos), sin columnas de comisión.
 
-**servicios_comisiones** (privada, aprobada): servicio_id (FK servicios), comision_modelo, updated_at. Guarda el modelo comercial (§5). Solo es accesible desde Supabase (panel o clave secreta): RLS activada y sin políticas para el público.
+**servicios_comisiones** (privada, aprobada): servicio_id (FK servicios), comision_modelo, updated_at. Guarda el modelo comercial (§5). Solo es accesible desde Supabase (panel o clave secreta): RLS activada y sin políticas para el público. **Carga**: desde el archivo local `supabase/private/servicios_comisiones.sql` (ignorado por Git), ejecutado a mano después de las migraciones; nunca desde `supabase/migrations/`.
 
 **solicitudes_contacto** (mapeo desde Base44 **aprobado**): id, nombre, email, telefono (nullable), servicio_interes_id (FK servicios, NULL = "todavía no lo sé"), mensaje, consentimiento (boolean, CHECK = true), microrelato_origen_id (nullable), created_at. Sin `origen`.
 

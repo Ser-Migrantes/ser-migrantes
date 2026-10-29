@@ -29,7 +29,11 @@ Ya aprobado (29/10/2026):
    - `servicios` según tu decisión sobre §5.3.
 2. [ ] Columna `origen` en `microrelatos` y `faqs` (sin valor por defecto; NULL en contenido propio o definitivo). `solicitudes_contacto` no la lleva.
 3. [ ] `pregunta` única en `faqs` (clave natural de la importación); comprobar que las 12 preguntas del CSV son distintas.
-4. [ ] Definir `servicios_comisiones`: clave primaria (p. ej. `servicio_id`, relación 1:1), FK, RLS activada sin políticas públicas y acceso solo desde Supabase. Plantear también cómo cargarlo: si se importa mediante una migración, sus valores quedan en un archivo SQL del repositorio. Ahora son datos de prueba y no importa, pero con datos comerciales reales no deben quedar en el repo (p. ej., cargarlos fuera de él).
+4. [ ] Definir `servicios_comisiones`:
+   - clave primaria (p. ej. `servicio_id`, relación 1:1), necesaria para el `on conflict (servicio_id)` del archivo local;
+   - FK a `servicios`;
+   - RLS activada sin políticas públicas y acceso solo desde Supabase.
+   - **Método de carga decidido** (29/10/2026): archivo local `supabase/private/servicios_comisiones.sql`, ignorado por Git, ya creado; nunca en `supabase/migrations/`.
 5. [ ] Proponer las políticas RLS por tabla según PRD y `CLAUDE.md`:
    - público: SELECT solo de contenido `publicado` y servicios `activo`, sin columnas internas;
    - `solicitudes_contacto`: solo INSERT, sin SELECT público.
@@ -44,7 +48,9 @@ Ya aprobado (29/10/2026):
 
 ## Bloque B — Generación y revisión de migraciones (sin aplicar)
 9. [ ] Generar en `supabase/migrations/` las migraciones de esquema y RLS según `DATA_MODEL.md` aprobado.
-10. [ ] Generar la migración de inserción leyendo directamente los CSV (4 servicios, 6 microrelatos, 12 FAQs y sus relaciones). Sin eventos, IDs de Base44, `created_by_id` ni `is_sample`.
+10. [ ] Generar la migración de inserción leyendo directamente los CSV (4 servicios, 6 microrelatos, 12 FAQs y sus relaciones). Sin eventos, IDs de Base44, `created_by_id`, `is_sample` ni `comision_modelo`.
+    - Revisar que `supabase/private/servicios_comisiones.sql` encaja con el esquema aprobado.
+    - Comprobar con `git check-ignore -v` que sigue ignorado.
 11. [ ] Incluir comprobaciones de la importación:
     - recuentos 4/6/12;
     - 6 microrelatos con servicio;
@@ -53,7 +59,7 @@ Ya aprobado (29/10/2026):
 12. [ ] Mostrarme el SQL completo para revisión. **Mi aprobación de las migraciones.**
 
 ## Bloque C — Aplicación en Supabase y verificación
-13. [ ] Aplicar las migraciones con el método aprobado. Solo tras mi aprobación del bloque B.
+13. [ ] Aplicar las migraciones con el método aprobado. Solo tras mi aprobación del bloque B. Después, ejecutar a mano `supabase/private/servicios_comisiones.sql` y comprobar que hay 4 filas.
 14. [ ] Verificar las comprobaciones de importación y mostrar los resultados.
 15. [ ] Probar RLS con la clave pública:
     - se lee solo el contenido publicado o activo;

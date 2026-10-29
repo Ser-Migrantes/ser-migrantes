@@ -29,6 +29,7 @@ Estado actual: **Fase 2** (no iniciada)
 - [ ] Migraciones: microrelatos, faqs, microrelatos_faqs, servicios, servicios_comisiones (privada), solicitudes_contacto (`origen` solo en microrelatos y faqs; `pregunta` única en faqs)
 - [ ] RLS en todas las tablas (público: SELECT publicado/activo; contacto: solo INSERT)
 - [ ] Migración de inserción leyendo los CSV: 4 servicios + 6 microrelatos y 12 FAQs de prueba (estos dos con `origen = 'base44_prueba'`), aplicando el mapeo "Wellcomy" → "Plataforma de extranjería", repetible sin duplicados
+- [ ] Cargar `comision_modelo` desde el archivo local `supabase/private/servicios_comisiones.sql` (ignorado por Git; creado el 29/10/2026), a mano y después de las migraciones; nunca desde `supabase/migrations/`
 - [ ] Tipos TypeScript generados
 **Hecha cuando:** `DATA_MODEL.md` aprobado, tablas creadas, RLS probado con la clave pública y los datos de los CSV cargados.
 
@@ -90,8 +91,12 @@ Estado actual: **Fase 2** (no iniciada)
 - [ ] **OBLIGATORIO antes del despliegue o de cualquier publicación pública (y mientras tanto, repo privado):**
   - [ ] Auditar el historial de Git.
   - [ ] Eliminar o reescribir los commits que contengan CSV con `comision_modelo`, eventos u otros datos sensibles (incluido el commit `0220cb7`).
-  - [ ] Verificar que no quedan copias en ramas, tags, releases ni archivos del árbol actual (incluidos la tabla de modelo comercial de `docs/PRD.md` §5, el teléfono y WhatsApp de `docs/BASE44_ANALYSIS.md` §8.1 y las migraciones de la Fase 2 que pudieran contener esos datos).
-  - [ ] Confirmar que `.gitignore` impide volver a añadir exportaciones o datos de negocio.
+  - [ ] Verificar que no quedan copias en ramas, tags, releases ni archivos del árbol actual. Incluye:
+    - la tabla de modelo comercial que estuvo en `docs/PRD.md` §5, retirada el 29/10/2026 pero presente en commits anteriores;
+    - el teléfono y el WhatsApp de `docs/BASE44_ANALYSIS.md` §8.1;
+    - las migraciones de la Fase 2 que pudieran contener esos datos.
+  - [ ] Verificar que `supabase/private/` no aparece ni en el árbol actual ni en el historial de Git, p. ej. con `git ls-files supabase/private` y `git log --all -- supabase/private`.
+  - [ ] Confirmar que `.gitignore` impide volver a añadir exportaciones o datos de negocio (incluida la regla `/supabase/private/`).
 - [ ] `npm run build` OK y repo en GitHub actualizado
 - [ ] Proyecto en Vercel importado (preset Next.js)
 - [ ] Variables de entorno en Vercel (Production y Preview)

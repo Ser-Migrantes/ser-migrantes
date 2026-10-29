@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Datos comerciales/privados locales: nunca se suben (ver docs/DATA_MODEL.md)
+/supabase/private/

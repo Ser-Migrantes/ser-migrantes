@@ -23,7 +23,8 @@ Plataforma en español que acompaña a personas migrantes en España: microrelat
 - `src/lib/supabase/` clientes Supabase (`client.ts`, `server.ts`)
 - `src/lib/data/` funciones tipadas de acceso a datos (una por entidad)
 - `src/types/` tipos (incluye los generados de Supabase)
-- `supabase/migrations/` SQL versionado (incluye la inserción de los datos de arranque de Base44)
+- `supabase/migrations/` SQL versionado (incluye la inserción de los datos de arranque de Base44, salvo `comision_modelo`)
+- `supabase/private/` SQL local con datos comerciales privados (`servicios_comisiones.sql`). Ignorado por Git: NUNCA subirlo
 - `public/` logo y estáticos
 - `reference/base44/` SOLO material de consulta: UI, esquema y datos de prueba exportados de Base44
 - `reference/brand/` logo y material de marca
@@ -45,7 +46,7 @@ Plataforma en español que acompaña a personas migrantes en España: microrelat
 - Los microrelatos son ejemplos de casos para prueba. No son reales, pero se usarán para este MVP; los reales se subirán más adelante y se eliminarán los de prueba (fuera de las fases actuales). No inventar casos, cifras ni datos legales.
 - Los datos de Base44 (6 microrelatos, 12 FAQs) son de PRUEBA y se cargan como datos de arranque con `origen = 'base44_prueba'` (no es valor por defecto). `origen` existe solo en `microrelatos` y `faqs` y marca el contenido de ejemplo importado; el contenido propio, revisado o definitivo lleva `origen` NULL. No se usa para clasificar solicitudes. No tratarlos como contenido aprobado. Se publican en la versión de DEMOSTRACIÓN con avisos visibles y sin presentarlos como casos reales (ver `docs/PRD.md` §4). Antes del lanzamiento definitivo deben revisarse y sustituirse o aprobarse.
 - El modo demostración afecta solo al contenido de ejemplo (microrelatos, FAQs, servicios). El formulario es real también en la versión pública: guarda en `solicitudes_contacto` mediante Server Action; nunca se sustituye por un envío simulado. En desarrollo y comprobaciones, usar solo datos ficticios.
-- Los datos de contacto de Base44 (teléfono, WhatsApp, «SeR MigranteS S.L.») se muestran como DATOS DE PRUEBA hasta que se confirmen los oficiales o se confirme usar estos. No inventar NIF, domicilio, correo, precios, acuerdos comerciales ni credenciales. `comision_modelo` nunca es público: vive en la tabla privada `servicios_comisiones` (RLS sin políticas públicas).
+- Los datos de contacto de Base44 (teléfono, WhatsApp, «SeR MigranteS S.L.») se muestran como DATOS DE PRUEBA hasta que se confirmen los oficiales o se confirme usar estos. No inventar NIF, domicilio, correo, precios, acuerdos comerciales ni credenciales. `comision_modelo` nunca es público: vive en la tabla privada `servicios_comisiones` (RLS sin políticas públicas). Sus valores solo pueden estar en `supabase/private/` (ignorado por Git); nunca en migraciones, documentación ni commits.
 - Las páginas legales (`/privacidad`, `/aviso-legal`, `/cookies`) existen pero NO son accesibles (provisional) hasta recibir los datos oficiales y la orden de retirar "Texto pendiente de revisión legal".
 - No implementar sin confirmación expresa: admin, login, registro, OAuth, roles (User), registro de eventos, modo oscuro.
 - La web ofrece información general y derivación, NO asesoramiento jurídico.

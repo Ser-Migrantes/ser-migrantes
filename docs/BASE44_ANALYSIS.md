@@ -246,7 +246,8 @@ Fuente: `Servicio.jsonc` (aportado el 29/10/2026), `Servicio_export.csv` y `lib/
 - **Tabla privada `servicios_comisiones`** (aprobada el 29/10/2026):
   - campos: `servicio_id` (FK a `servicios`), `comision_modelo` y `updated_at`;
   - `servicios` es pública (solo lectura de activos); `servicios_comisiones` solo es accesible desde Supabase (panel o clave secreta), con RLS activada y sin políticas para el público;
-  - la clave primaria (p. ej. `servicio_id`, relación 1:1) y cómo se cargan los valores sin dejarlos en el repositorio se detallan en `DATA_MODEL.md`.
+  - **Carga (aprobada el 29/10/2026):** desde el archivo local `supabase/private/servicios_comisiones.sql`, ignorado por Git (`/supabase/private/` en `.gitignore`), que nunca se sube a GitHub. Se ejecuta a mano después de las migraciones de la Fase 2. Fuente actual de los valores: `Servicio_export.csv` (datos de prueba); con datos reales, los valores irán directamente al archivo local;
+  - la clave primaria (p. ej. `servicio_id`, relación 1:1) se detalla en `DATA_MODEL.md`.
 - **Orden**: Base44 ordenaba por `nombre`; el MVP usará `orden` del PRD §5.
 
 ### 5.4 Solicitud → `solicitudes_contacto` (mapeo aprobado)
@@ -295,7 +296,7 @@ Así se mantiene la clave foránea aprobada. No se crea un quinto servicio ni se
 **Requisitos de la importación (Fase 2):**
 - Leer los valores directamente de los CSV, sin inventarlos ni resumirlos.
 - Repetible sin duplicados, apoyándose en claves naturales únicas: `slug` en microrelatos, `nombre` en servicios y `pregunta` en FAQs.
-- `comision_modelo` se carga en `servicios_comisiones`, no en `servicios`.
+- `comision_modelo` se carga en `servicios_comisiones`, no en `servicios`, y **no mediante `supabase/migrations/`**: se usa el archivo local privado `supabase/private/servicios_comisiones.sql` (§5.3).
 - Comprobar al final que no se pierde ninguna relación:
   - 6 microrelatos con su servicio, incluido el mapeo de Wellcomy;
   - el número de pares FAQ–relato coincide con los arrays del CSV.
@@ -461,16 +462,15 @@ Antes del lanzamiento definitivo habrá que:
 
 | # | Decisión | Origen | Bloquea |
 |---|---|---|---|
-| 1 | Cómo cargar `comision_modelo` en `servicios_comisiones` sin dejar los valores en el repositorio (con los datos de prueba actuales no importa) | §5.3, PRD §5 | Fase 2 (`DATA_MODEL.md`) |
-| 2 | Datos de negocio oficiales, o confirmar los de prueba como oficiales | §8.1 | Lanzamiento definitivo |
-| 3 | **[futuro]** Datos del responsable del tratamiento, textos legales definitivos y coherencia del consentimiento con la derivación a terceros; después, hacer accesibles las páginas legales. **Riesgo abierto** mientras tanto: el formulario guarda datos sin política de privacidad accesible (§8.2) | §8.2, PRD §11.6 y §11.9 | Activar las páginas legales y abrir el formulario a consultas reales |
-| 4 | Que aportes en `reference/brand/` un logo con contraste para fondos oscuros, para sustituir el icono de Base44 en el pie | §3 | Fase 4 (mientras tanto, icono de Base44) |
-| 5 | Integrar las imágenes PNG con `next/image` (aprobado) y verificar visualización, peso servido y límites de Vercel | §8.4 | Fase 4 |
-| 6 | Mínimo de 15 caracteres en el mensaje (Base44) frente a PRD sin mínimo | §5.4 | Fase 7 |
-| 7 | Etiqueta del servicio propio: "Servicio propio" (Base44) frente a "Servicio propio – ServiR Migrantes" (PRD §5) | §5.3 | Fase 5 |
-| 8 | **[futuro]** Eventos: historial (7.1), registro propio (7.2), analítica externa (7.3, probable) | §7 | No bloquea la demo |
-| 9 | **[futuro]** Admin, login, registro, OAuth y entidad User | §2, §5.5 | No bloquea la demo |
-| 10 | **[futuro]** Modo oscuro | §3 | No bloquea la demo |
+| 1 | Datos de negocio oficiales, o confirmar los de prueba como oficiales | §8.1 | Lanzamiento definitivo |
+| 2 | **[futuro]** Datos del responsable del tratamiento, textos legales definitivos y coherencia del consentimiento con la derivación a terceros; después, hacer accesibles las páginas legales. **Riesgo abierto** mientras tanto: el formulario guarda datos sin política de privacidad accesible (§8.2) | §8.2, PRD §11.6 y §11.9 | Activar las páginas legales y abrir el formulario a consultas reales |
+| 3 | Que aportes en `reference/brand/` un logo con contraste para fondos oscuros, para sustituir el icono de Base44 en el pie | §3 | Fase 4 (mientras tanto, icono de Base44) |
+| 4 | Integrar las imágenes PNG con `next/image` (aprobado) y verificar visualización, peso servido y límites de Vercel | §8.4 | Fase 4 |
+| 5 | Mínimo de 15 caracteres en el mensaje (Base44) frente a PRD sin mínimo | §5.4 | Fase 7 |
+| 6 | Etiqueta del servicio propio: "Servicio propio" (Base44) frente a "Servicio propio – ServiR Migrantes" (PRD §5) | §5.3 | Fase 5 |
+| 7 | **[futuro]** Eventos: historial (7.1), registro propio (7.2), analítica externa (7.3, probable) | §7 | No bloquea la demo |
+| 8 | **[futuro]** Admin, login, registro, OAuth y entidad User | §2, §5.5 | No bloquea la demo |
+| 9 | **[futuro]** Modo oscuro | §3 | No bloquea la demo |
 
 **Resueltas el 29/10/2026**:
 - **Rutas**: `/historias`, `/historias/[slug]` y `/preguntas-frecuentes`, sin redirecciones.
@@ -479,6 +479,7 @@ Antes del lanzamiento definitivo habrá que:
 - **Tipografías**: Fraunces e Inter hasta nuevo aviso.
 - **Imágenes**: ya no hacen falta sustitutas; se usan las PNG existentes (sustituyen a las AVIF).
 - **`servicios`**: estructura aprobada; `comision_modelo` en la tabla privada `servicios_comisiones`.
+- **Carga de comisiones** (antes pendiente nº 1): desde el archivo local `supabase/private/servicios_comisiones.sql`, ignorado por Git.
 - **FAQs**: `pregunta` como clave única.
 - **`origen`**: solo en `microrelatos` y `faqs`; no se usa para clasificar solicitudes.
 - **Pie de página**: icono de Base44 hasta tener un logo para fondos oscuros.

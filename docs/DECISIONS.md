@@ -183,3 +183,30 @@ Trazabilidad de planes aprobados y ejecutados durante la creación de SeR Migran
   - Commit `69389f7` subido a `origin/main` (`4113bec..69389f7 main -> main`).
   - Las entradas anteriores del 29/10/2026 marcadas como «commit y push no realizados» quedan incluidas en este commit.
   - La Fase 2 no se ha iniciado.
+### [2026-10-29] Fase 1 — Carga de `servicios_comisiones` desde un archivo local ignorado por Git
+- **Qué se aprobó:**
+  - Los valores de `comision_modelo` (tabla privada `servicios_comisiones`) se cargan desde un **archivo local ignorado por Git**, que nunca se sube a GitHub.
+  - Los valores actuales son de prueba y no son sensibles, pero la regla se aplica ya para cuando haya datos reales.
+  - Condiciones:
+    1. primero, `/supabase/private/` en `.gitignore`, verificado con `git check-ignore -v`;
+    2. después, crear `supabase/private/servicios_comisiones.sql`;
+    3. quitar del PRD la tabla con los valores y dejar una nota (archivo local privado; fuente actual, `Servicio_export.csv`);
+    4. actualizar `BASE44_ANALYSIS.md`, `PLAN.md`, `TASKS.md`, `CLAUDE.md` y `DECISIONS.md`;
+    5. en la auditoría previa al despliegue, verificar que `supabase/private/` no está ni en el árbol ni en el historial de Git.
+- **Archivos creados/modificados:**
+  - `.gitignore`: regla `/supabase/private/`.
+  - `supabase/private/servicios_comisiones.sql`: **local e ignorado, no se versiona**. Contiene un `insert … on conflict (servicio_id)` con los 4 valores leídos literalmente del CSV mediante script, buscando `servicio_id` por `nombre`.
+  - `docs/PRD.md`: §5, tabla de valores sustituida por la nota; §7, método de carga.
+  - `docs/BASE44_ANALYSIS.md`: §5.3, §6 y §10 (pendiente resuelto; tabla renumerada).
+  - `docs/PLAN.md`: Fase 2, carga a mano tras las migraciones; Fase 10, verificación de `supabase/private/` en árbol e historial.
+  - `docs/TASKS.md`: tareas 4, 10 y 13.
+  - `CLAUDE.md`: estructura de carpetas y regla de `comision_modelo`.
+  - `docs/DECISIONS.md`.
+- **Decisiones tomadas (por Claude):**
+  - Orden respetado: el archivo se creó solo después de verificar con `git check-ignore -v` (`.gitignore:45:/supabase/private/`) que la ruta quedaba ignorada.
+  - El archivo se creó ahora y no en la Fase 2. Depende de las tablas de la Fase 2 y de que `servicio_id` sea clave primaria o única en `servicios_comisiones`; se confirmará en `DATA_MODEL.md`.
+  - Corregido un resto en `TASKS.md` (tarea 4): al editarla la vez anterior quedó pegado el texto antiguo sobre cómo cargar las comisiones.
+  - Los valores de prueba siguen en `reference/base44/Servicio_export.csv` y en commits anteriores (incluida la tabla que estuvo en el PRD). Lo cubre la auditoría del historial de la Fase 10.
+- **Estado:**
+  - Ejecutado: cambios y verificaciones.
+  - Pendiente: tu revisión; commit y push no realizados.
