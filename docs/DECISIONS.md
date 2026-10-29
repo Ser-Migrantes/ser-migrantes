@@ -97,5 +97,4 @@ Trazabilidad de planes aprobados y ejecutados durante la creación de SeR Migran
   4. La auditoría previa al despliegue incluye también el teléfono y el WhatsApp de `BASE44_ANALYSIS.md` §8.1.
   5. Confirmados el resto del resumen, el commit y el push.
 - **Estado:**
-  - Ejecutado: ajustes documentales.
-  - Pendiente: commit y push (se registran solo si terminan bien).
+  - Ejecutado: ajustes documentales. Commit `0f3f363` subido a `origin/main` (`2551743..0f3f363 main -> main`). Fase 1 cerrada; la Fase 2 no se ha iniciado.
