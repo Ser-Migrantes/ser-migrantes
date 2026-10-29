@@ -3,7 +3,7 @@
 # PLAN — Ser Migrantes MVP
 
 Leyenda: [ ] pendiente · [x] hecho. Una fase cada vez; el detalle de la fase en curso está en `docs/TASKS.md`.
-Estado actual: **Fase 1**
+Estado actual: **Fase 2** (no iniciada)
 
 ## Fase 0 — Preparación y scaffolding
 - [x] Material de Base44 en `reference/base44/`: código React (sin `node_modules`, `.env*`, `.git`), `tablas.md` y los 4 CSV
@@ -15,20 +15,20 @@ Estado actual: **Fase 1**
 **Hecha cuando:** `dev`, `build`, `lint` y `typecheck` pasan.
 
 ## Fase 1 — Análisis de Base44
-- [ ] Inventario de pantallas y componentes
-- [ ] Extraer paleta, tipografías y estilos reales a una lista (valores exactos para tokens Tailwind)
-- [ ] Lista de llamadas al SDK (`entities.*`, `auth.*`, `integrations.*`) y su equivalente en Supabase
-- [ ] Esquema de datos: contrastar `reference/base44/tablas.md` y los CSV con `docs/PRD.md` §7
-- [ ] Marcar como "no confirmado" todo campo o relación que no se pueda verificar desde el código o los CSV
-- [ ] NO generar datos de ejemplo: los CSV ya contienen los datos de arranque
-**Hecha cuando:** existe `docs/BASE44_ANALYSIS.md` aprobado por mí.
+- [x] Inventario de pantallas y componentes
+- [x] Extraer paleta, tipografías y estilos reales a una lista (valores exactos para tokens Tailwind)
+- [x] Lista de llamadas al SDK (`entities.*`, `auth.*`, `integrations.*`) y su equivalente en Supabase
+- [x] Esquema de datos: contrastar `reference/base44/tablas.md` y los CSV con `docs/PRD.md` §7
+- [x] Marcar como "no confirmado" todo campo o relación que no se pueda verificar desde el código o los CSV
+- [x] NO generar datos de ejemplo: los CSV ya contienen los datos de arranque
+**Hecha cuando:** existe `docs/BASE44_ANALYSIS.md` aprobado por mí. (Aprobado el 29/10/2026; las propuestas técnicas de Postgres se aprueban en `DATA_MODEL.md`, Fase 2.)
 
 ## Fase 2 — Supabase: modelo de datos y seguridad
 - [ ] Proyecto Supabase Free creado por mí
 - [ ] Crear `docs/DATA_MODEL.md` a partir de `docs/BASE44_ANALYSIS.md`, `reference/base44/tablas.md` y `docs/PRD.md` §7 (tipos exactos, claves foráneas, índices, valores por defecto y políticas RLS por tabla)
 - [ ] Migraciones: microrelatos, faqs, microrelatos_faqs, servicios, solicitudes_contacto
 - [ ] RLS en todas las tablas (público: SELECT publicado/activo; contacto: solo INSERT)
-- [ ] Migración de inserción leyendo los CSV: 4 servicios reales + 6 microrelatos y 12 FAQs de prueba, todos con `origen = 'base44_prueba'`
+- [ ] Migración de inserción leyendo los CSV: 4 servicios + 6 microrelatos y 12 FAQs de prueba (estos dos con `origen = 'base44_prueba'`), repetible sin duplicados
 - [ ] Tipos TypeScript generados
 **Hecha cuando:** `DATA_MODEL.md` aprobado, tablas creadas, RLS probado con la clave pública y los datos de los CSV cargados.
 
@@ -81,13 +81,21 @@ Estado actual: **Fase 1**
 **Hecha cuando:** no se cargan scripts de analítica sin consentimiento.
 
 ## Fase 10 — Despliegue
+- [ ] **OBLIGATORIO antes del despliegue o de cualquier publicación pública (y mientras tanto, repo privado):**
+  - [ ] Auditar el historial de Git.
+  - [ ] Eliminar o reescribir los commits que contengan CSV con `comision_modelo`, eventos u otros datos sensibles (incluido el commit `0220cb7`).
+  - [ ] Verificar que no quedan copias en ramas, tags, releases ni archivos del árbol actual (incluidos la tabla de modelo comercial de `docs/PRD.md` §5, el teléfono y WhatsApp de `docs/BASE44_ANALYSIS.md` §8.1 y las migraciones de la Fase 2 que pudieran contener esos datos).
+  - [ ] Confirmar que `.gitignore` impide volver a añadir exportaciones o datos de negocio.
 - [ ] `npm run build` OK y repo en GitHub actualizado
 - [ ] Proyecto en Vercel importado (preset Next.js)
 - [ ] Variables de entorno en Vercel (Production y Preview)
-- [ ] Prueba end-to-end en la URL pública (lectura y envío del formulario)
+- [ ] Prueba end-to-end en la URL pública: lectura desde Supabase y envío real del formulario, verificando que la solicitud se guarda en `solicitudes_contacto`
+- [ ] Comprobar que el formulario muestra éxito solo cuando la inserción se confirma y un error claro si falla
+- [ ] Comprobar que las solicitudes guardadas no son legibles públicamente
 - [ ] Dominio sermigrantes.es cuando se decida
 - [ ] Documentar los pasos reales seguidos en `docs/DEPLOY.md`
-**Hecha cuando:** la URL pública lee y escribe en Supabase y `docs/DEPLOY.md` refleja lo realmente hecho.
+**Hecha cuando:** la URL pública lee de Supabase con los avisos de demostración correspondientes al contenido de ejemplo; el formulario guarda correctamente las solicitudes en `solicitudes_contacto`; las solicitudes no son legibles públicamente; y `docs/DEPLOY.md` refleja lo realmente hecho.
+Las pruebas se realizan con datos ficticios. Antes de abrir el formulario a consultas reales, deben completarse la información del responsable y la política de privacidad.
 
 ## Fase 11 — QA y seguridad
 - [ ] Revisión: secretos, tablas sin RLS, clave secreta, validación de entradas

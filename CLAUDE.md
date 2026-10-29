@@ -42,8 +42,10 @@ Plataforma en español que acompaña a personas migrantes en España: microrelat
 - NUNCA commitear `.env*` (salvo `.env.example` sin valores).
 - RLS activado en TODAS las tablas. Público: solo SELECT de contenido con `estado = 'publicado'` (microrelatos, faqs) y servicios `activo`. `solicitudes_contacto`: solo INSERT para público, sin SELECT público. No crear políticas de escritura para usuarios anónimos en otras tablas.
 - Datos personales mínimos: no registrar datos del formulario en logs ni en consola; consentimiento explícito obligatorio.
-- Los microrelatos son casos reales ADAPTADOS, no testimonios literales. No inventar casos, cifras ni datos legales.
-- Los datos de Base44 (6 microrelatos, 12 FAQs) son de PRUEBA y se cargan como datos de arranque con `origen = 'base44_prueba'`. No tratarlos como contenido aprobado; antes del lanzamiento público deben revisarse y sustituirse o aprobarse.
+- Los microrelatos son ejemplos de casos para prueba. No son reales, pero se usarán para este MVP; los reales se subirán más adelante y se eliminarán los de prueba (fuera de las fases actuales). No inventar casos, cifras ni datos legales.
+- Los datos de Base44 (6 microrelatos, 12 FAQs) son de PRUEBA y se cargan como datos de arranque con `origen = 'base44_prueba'` (no es valor por defecto). No tratarlos como contenido aprobado. Se publican en la versión de DEMOSTRACIÓN con avisos visibles y sin presentarlos como casos reales (ver `docs/PRD.md` §4). Antes del lanzamiento definitivo deben revisarse y sustituirse o aprobarse.
+- El modo demostración afecta solo al contenido de ejemplo (microrelatos, FAQs, servicios). El formulario es real también en la versión pública: guarda en `solicitudes_contacto` mediante Server Action; nunca se sustituye por un envío simulado. En desarrollo y comprobaciones, usar solo datos ficticios.
+- No publicar datos de negocio no confirmados (teléfono, WhatsApp, forma societaria).
 - La web ofrece información general y derivación, NO asesoramiento jurídico.
 
 ## Cómo trabajar
