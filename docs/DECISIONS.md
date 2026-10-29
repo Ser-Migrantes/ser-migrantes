@@ -209,4 +209,5 @@ Trazabilidad de planes aprobados y ejecutados durante la creación de SeR Migran
   - Los valores de prueba siguen en `reference/base44/Servicio_export.csv` y en commits anteriores (incluida la tabla que estuvo en el PRD). Lo cubre la auditoría del historial de la Fase 10.
 - **Estado:**
   - Ejecutado: cambios y verificaciones.
-  - Pendiente: tu revisión; commit y push no realizados.
+  - Commit `49d8986` subido a `origin/main` (`1e423f2..49d8986 main -> main`). `supabase/private/` quedó fuera del commit, comprobado en el staging.
+  - La Fase 2 no se ha iniciado.
