@@ -179,5 +179,7 @@ Trazabilidad de planes aprobados y ejecutados durante la creación de SeR Migran
   - No se ha cambiado código: `next/image` queda documentado para la Fase 4, que es donde se integran las imágenes.
   - Sin respuesta sobre el nombre de la tabla, se mantiene `servicios_comisiones`.
 - **Estado:**
-  - Ejecutado: cambios documentales.
-  - Pendiente: verificaciones, commit y push (el push se registra solo si termina bien).
+  - Ejecutado: cambios documentales; `typecheck`, `lint` y `build` OK en la raíz.
+  - Commit `69389f7` subido a `origin/main` (`4113bec..69389f7 main -> main`).
+  - Las entradas anteriores del 29/10/2026 marcadas como «commit y push no realizados» quedan incluidas en este commit.
+  - La Fase 2 no se ha iniciado.
