@@ -1,6 +1,6 @@
 <!-- fases y estado (leer al empezar cada sesión) -->
 
-# PLAN — Ser Migrantes MVP
+# PLAN — SeR MigranteS MVP
 
 Leyenda: [ ] pendiente · [x] hecho. Una fase cada vez; el detalle de la fase en curso está en `docs/TASKS.md`.
 Estado actual: **Fase 2** (no iniciada)
@@ -26,9 +26,9 @@ Estado actual: **Fase 2** (no iniciada)
 ## Fase 2 — Supabase: modelo de datos y seguridad
 - [ ] Proyecto Supabase Free creado por mí
 - [ ] Crear `docs/DATA_MODEL.md` a partir de `docs/BASE44_ANALYSIS.md`, `reference/base44/tablas.md` y `docs/PRD.md` §7 (tipos exactos, claves foráneas, índices, valores por defecto y políticas RLS por tabla)
-- [ ] Migraciones: microrelatos, faqs, microrelatos_faqs, servicios, solicitudes_contacto
+- [ ] Migraciones: microrelatos, faqs, microrelatos_faqs, servicios, servicios_comisiones (privada), solicitudes_contacto (`origen` solo en microrelatos y faqs; `pregunta` única en faqs)
 - [ ] RLS en todas las tablas (público: SELECT publicado/activo; contacto: solo INSERT)
-- [ ] Migración de inserción leyendo los CSV: 4 servicios + 6 microrelatos y 12 FAQs de prueba (estos dos con `origen = 'base44_prueba'`), repetible sin duplicados
+- [ ] Migración de inserción leyendo los CSV: 4 servicios + 6 microrelatos y 12 FAQs de prueba (estos dos con `origen = 'base44_prueba'`), aplicando el mapeo "Wellcomy" → "Plataforma de extranjería", repetible sin duplicados
 - [ ] Tipos TypeScript generados
 **Hecha cuando:** `DATA_MODEL.md` aprobado, tablas creadas, RLS probado con la clave pública y los datos de los CSV cargados.
 
@@ -40,15 +40,20 @@ Estado actual: **Fase 2** (no iniciada)
 **Hecha cuando:** una página lista los servicios desde Supabase.
 
 ## Fase 4 — Layout y diseño
-- [ ] Tokens Tailwind con la paleta de Base44; logo en header
+- [ ] Tokens Tailwind con la paleta de Base44; tipografías Fraunces e Inter; quitar el modo oscuro automático del scaffold (el modo oscuro es futuro, pendiente de confirmación)
+- [ ] `logo.png` en el header; en el footer (fondo oscuro), el icono de Base44 (`BrandMark` en tono claro) hasta tener un logo con contraste para fondos oscuros; favicon = logo
+- [ ] Pendiente de ti: aportar en `reference/brand/` un logo con contraste para fondos oscuros; después, sustituir el icono del footer
+- [ ] Integrar las imágenes PNG de `public/images/` (Hero y Cierre) con `next/image` (aprobado) y verificar visualización, peso servido (originales de 1,1 y 1,8 MB), compatibilidad y límites de optimización de Vercel Hobby
 - [ ] Header, footer, navegación, botones, tarjetas, formularios accesibles
+- [ ] Datos de contacto de prueba visibles (teléfono, WhatsApp, aviso flotante, «© SeR MigranteS S.L.»)
 **Hecha cuando:** layout responsive aprobado en móvil y escritorio.
 
 ## Fase 5 — Páginas públicas
 - [ ] Landing
-- [ ] Listado de microrelatos (6 de prueba)
-- [ ] Ficha `/microrelatos/[slug]` con FAQs asociadas
-- [ ] FAQs con buscador y etiquetas
+- [ ] Listado de microrelatos en `/historias` (6 de prueba)
+- [ ] Ficha `/historias/[slug]` con FAQs asociadas
+- [ ] FAQs con buscador y etiquetas en `/preguntas-frecuentes`
+- [ ] Sin redirecciones de rutas antiguas de Base44 (nunca fue pública)
 - [ ] Servicios (4) con tipo y CTA al formulario
 - [ ] 404 personalizada
 **Hecha cuando:** todas las páginas leen datos reales de Supabase y los estados vacíos están cubiertos.
@@ -69,10 +74,11 @@ Estado actual: **Fase 2** (no iniciada)
 **Hecha cuando:** un envío de prueba aparece en Supabase y no es legible con la clave pública.
 
 ## Fase 8 — Páginas legales
-- [ ] `/privacidad`, `/aviso-legal`, `/cookies` con texto provisional (marcado)
-- [ ] Enlaces en footer y formulario
+- [ ] `/privacidad`, `/aviso-legal`, `/cookies` creadas con los textos de Base44 tal como estaban ("Texto pendiente de revisión legal")
+- [ ] **Decisión provisional:** páginas no accesibles (sin enlaces en footer ni formulario, fuera del sitemap, 404) hasta que aportes los datos oficiales e indiques retirar los textos pendientes. **Riesgo abierto** mientras tanto: el formulario guarda datos sin política de privacidad accesible
+- [ ] Formulario: texto "Al enviar aceptas la política de privacidad" sin enlace, con nota de política pendiente
 - [ ] Aviso "información general, no asesoramiento jurídico"
-**Hecha cuando:** enlaces visibles. Revisión jurídica pendiente por mi parte.
+**Hecha cuando:** las páginas existen en el código, no son accesibles y el aviso jurídico es visible. Revisión jurídica y activación pendientes por mi parte.
 
 ## Fase 9 — Analítica (CONDICIONAL: solo si decido usarla)
 - [ ] Decidir herramienta (PRD §11.4)
@@ -105,7 +111,9 @@ Las pruebas se realizan con datos ficticios. Antes de abrir el formulario a cons
 **Hecha cuando:** sin críticos abiertos.
 
 ## Fase 12 — Backlog post-MVP (NO empezar sin decisión)
-- [ ] Panel de administración con login (CRUD de contenido y solicitudes)
+- [ ] Panel de administración con login, registro, OAuth y roles (entidad User) (CRUD de contenido y solicitudes); pendiente de confirmación
+- [ ] Registro propio de eventos o analítica (ver `BASE44_ANALYSIS.md` §7); pendiente de confirmación
+- [ ] Modo oscuro; pendiente de confirmación
 - [ ] Notificación por email de solicitudes
 - [ ] Buscador por casuística con cobro progresivo (PRD §8) y pasarela de pago
 - [ ] Área privada de usuarios

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ser Migrantes",
+  title: "SeR MigranteS",
   description:
     "Acompañamos a personas migrantes en España con relatos, respuestas claras y servicios de confianza.",
 };

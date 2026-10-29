@@ -11,21 +11,31 @@ Regla: cada bloque necesita mi aprobación antes del siguiente. Aprobar el anál
 ## Antes de empezar (lo hago yo)
 - [ ] Crear el proyecto Supabase Free.
 - [ ] Guardar en `.env.local` (no se commitea) `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. No compartir la clave secreta en el chat.
-- [ ] Confirmar el mapeo "Wellcomy" → "Plataforma de extranjería" (`BASE44_ANALYSIS.md` §6).
+- [x] Mapeo "Wellcomy" → "Plataforma de extranjería": decidido aplicarlo (29/10/2026).
+- [x] Estructura de `servicios` aprobada (29/10/2026).
+
+Ya aprobado (29/10/2026):
+- estructura de `microrelatos`, `faqs` y `servicios`;
+- mapeo de `solicitudes_contacto`;
+- `pregunta` única en `faqs`;
+- tabla privada `servicios_comisiones` (`servicio_id`, `comision_modelo`, `updated_at`);
+- `origen` solo en `microrelatos` y `faqs`.
 
 ## Bloque A — Propuesta y aprobación de `docs/DATA_MODEL.md`
 1. [ ] En modo plan, proponer `docs/DATA_MODEL.md`:
    - tablas `microrelatos`, `faqs`, `microrelatos_faqs`, `servicios` y `solicitudes_contacto`;
-   - para cada una: tipos exactos, claves, FK, índices, valores por defecto y `check`.
-2. [ ] Dejar explícitas para mi decisión las restricciones más estrictas que Base44 (§10.2): `slug` y `perfil` not null en microrelatos, `casuistica` not null en FAQs.
-3. [ ] Proponer la clave natural de las FAQs para que la importación no duplique (§10.3).
-4. [ ] Proponer almacenamiento y permisos de `comision_modelo` **sin acceso público con la clave pública**; ocultarlo en la interfaz no basta (§10.4). Plantear también cómo cargarlo: si se importa mediante una migración, sus valores quedan en un archivo SQL del repositorio. Ahora son datos de prueba y no importa, pero con datos comerciales reales no deben quedar en el repo (p. ej., cargarlos fuera de él).
+   - para cada una: tipos exactos, claves, FK, índices, valores por defecto y `check`;
+   - `microrelatos` y `faqs` según la estructura aprobada;
+   - `servicios` según tu decisión sobre §5.3.
+2. [ ] Columna `origen` en `microrelatos` y `faqs` (sin valor por defecto; NULL en contenido propio o definitivo). `solicitudes_contacto` no la lleva.
+3. [ ] `pregunta` única en `faqs` (clave natural de la importación); comprobar que las 12 preguntas del CSV son distintas.
+4. [ ] Definir `servicios_comisiones`: clave primaria (p. ej. `servicio_id`, relación 1:1), FK, RLS activada sin políticas públicas y acceso solo desde Supabase. Plantear también cómo cargarlo: si se importa mediante una migración, sus valores quedan en un archivo SQL del repositorio. Ahora son datos de prueba y no importa, pero con datos comerciales reales no deben quedar en el repo (p. ej., cargarlos fuera de él).
 5. [ ] Proponer las políticas RLS por tabla según PRD y `CLAUDE.md`:
    - público: SELECT solo de contenido `publicado` y servicios `activo`, sin columnas internas;
    - `solicitudes_contacto`: solo INSERT, sin SELECT público.
 6. [ ] Proponer el método de importación desde los CSV:
    - valores sin inventar ni resumir;
-   - relaciones por slug y nombre;
+   - relaciones por slug y nombre, con el mapeo "Wellcomy" → "Plataforma de extranjería";
    - `origen = 'base44_prueba'` sin valor por defecto;
    - microrelatos y FAQs con `estado = 'publicado'`;
    - repetible sin duplicados.

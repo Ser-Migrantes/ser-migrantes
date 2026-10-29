@@ -14,7 +14,7 @@ Los 6 microrelatos y las 12 FAQs son datos de PRUEBA generados por Base44, no co
 | `Pregunta_export.csv` | 12 | |
 | `Servicio_export.csv` | 4 | |
 | `Evento_export.csv` | ≈152 (recuento de líneas) | No se importa (ver Evento) |
-| `Solicitud_export.csv` | 0 | **Vacío: 0 bytes, sin cabeceras ni registros** |
+| `Solicitud_export.csv` | 0 | Solo cabeceras originales (aportadas el 29/10/2026), sin registros |
 
 Los CSV se conservan sin cambios como referencia.
 
@@ -55,13 +55,15 @@ Los CSV se conservan sin cambios como referencia.
 - Permitidos por el esquema (6, se conservan todos): Recién llegada/o · Familia · Estudiante · Trabajador/a · Emprendedor/a · Persona refugiada.
 - Presentes en los registros exportados (4): Recién llegada/o · Familia · Estudiante · Trabajador/a.
 
-**Mapeo propuesto, pendiente de confirmación antes de importar:** `servicio_relacionado = "Wellcomy"` (relato `alquilar-una-habitacion`) → servicio "Plataforma de extranjería" (proveedor "Wellcomy"). No se crea un quinto servicio ni se modifica el relato.
+**Mapeo que se aplica en la importación (decisión del 29/10/2026):** `servicio_relacionado = "Wellcomy"` (relato `alquilar-una-habitacion`) → servicio "Plataforma de extranjería" (proveedor "Wellcomy"). No se crea un quinto servicio ni se modifica el relato.
+
+**Estructura de `microrelatos` y `faqs`: aprobada el 29/10/2026**, incluidas las restricciones más estrictas que Base44.
 
 ## Pregunta frecuente (`faqs`)
 | Campo Base44 | Esquema B44 | Observado | Propuesta Postgres |
 |---|---|---|---|
 | id | sistema | | `id uuid primary key default gen_random_uuid()` (clave nueva) |
-| pregunta | obligatorio | | `pregunta text not null` |
+| pregunta | obligatorio | | `pregunta text not null unique` (aprobado: evita duplicados y es la clave de la importación) |
 | respuesta | obligatorio | | `respuesta text not null` |
 | casuistica | **opcional**, enum de 8 | todas con valor | `casuistica text not null` + `check` (más estricta que B44) |
 | etiquetas | array de texto | | `etiquetas text[] not null default '{}'` |
@@ -73,27 +75,32 @@ Los CSV se conservan sin cambios como referencia.
 
 Nota: la relación es por SLUG del microrelato, no por id. Una FAQ puede asociarse a varios microrelatos y viceversa. Las FAQs sin microrelato asociado también se importan.
 
-## Servicio (`servicios`)
-**No existe `Servicio.jsonc` en la exportación.** Es una limitación de la exportación, no un bloqueo. Los tipos y valores salen del CSV y del código (`src/lib/casuisticas.js`). **Las reglas de acceso originales son desconocidas.**
+## Servicio (`servicios`) — estructura aprobada (29/10/2026)
+Fuente: `base44/entities/Servicio.jsonc` (aportado el 29/10/2026), el CSV y `src/lib/casuisticas.js`.
 
-| Campo Base44 | Observado (CSV) | Valores en el código | Propuesta Postgres |
+**Reglas de acceso B44 (confirmadas):** lectura si `estado = 'activo'` o si eres admin; crear, editar y borrar solo admin. En Base44 la lectura se aplicaba a la fila entera, así que `comision_modelo` era legible públicamente en los servicios activos. En el MVP no lo será.
+
+| Campo Base44 | Esquema B44 | Observado (CSV) | Propuesta Postgres |
 |---|---|---|---|
-| id | texto | | `id uuid primary key default gen_random_uuid()` (clave nueva) |
-| nombre | 4 nombres distintos | | `nombre text not null` |
-| descripcion | con valor | | `descripcion text not null` |
-| tipo | aliado (2), propio (1), colaborador (1) | `propio`, `aliado`, `colaborador` | `tipo text not null check (tipo in ('aliado','propio','colaborador'))` |
-| proveedor | con valor | | `proveedor text not null` |
-| url_destino | VACÍO en los 4 | | `url_destino text` (nullable) |
-| comision_modelo | con valor en los 4 | | **Se conserva** como dato comercial interno provisional, **sin acceso público**. En la Fase 2 se propondrán almacenamiento y permisos (no basta con ocultarlo en la interfaz) |
-| estado | `activo` en los 4 | `activo`, `inactivo` | `estado text not null default 'activo' check (estado in ('activo','inactivo'))` |
+| id | sistema | texto | `id uuid primary key default gen_random_uuid()` (clave nueva) |
+| nombre | obligatorio | 4 nombres distintos | `nombre text not null unique` (`unique`: clave natural de la importación) |
+| descripcion | obligatorio | con valor | `descripcion text not null` |
+| tipo | **opcional**, enum `propio`/`aliado`/`colaborador` | aliado (2), propio (1), colaborador (1) | `tipo text not null check (tipo in ('aliado','propio','colaborador'))` (más estricta que B44) |
+| proveedor | **opcional** | con valor | `proveedor text not null` (más estricta que B44) |
+| url_destino | opcional; vacío = la solicitud va por el formulario de contacto | VACÍO en los 4 | `url_destino text` (nullable) |
+| comision_modelo | opcional; "descripción comercial interna del acuerdo" | con valor en los 4 | **Se conserva** como dato comercial interno provisional en la tabla **privada** `servicios_comisiones` (`servicio_id`, `comision_modelo`, `updated_at`), accesible solo desde Supabase. No va en `servicios` |
+| estado | enum `activo`/`inactivo`, por defecto `activo` | `activo` en los 4 | `estado text not null default 'activo' check (estado in ('activo','inactivo'))` |
 | — | — | — | `orden int` (PRD §5) |
-| created_date / updated_date | | | `created_at`, `updated_at` |
-| created_by_id / is_sample | | | NO migrar |
+| — | — | — | Sin `origen`: los 4 servicios no se tratan como datos de prueba |
+| created_date / updated_date | sistema | | `created_at`, `updated_at` |
+| created_by_id / is_sample | sistema | | NO migrar |
 
 Los 4 servicios se importan y se muestran. `url_destino` está pendiente de aportar.
 
 ## Solicitud (`solicitudes_contacto`)
-La entidad **existe** en Base44 (`base44/entities/Solicitud.jsonc`, formulario de contacto y panel de admin). Su CSV está vacío, así que no hay datos que importar. El modelo de destino es el del PRD §7.
+La entidad **existe** en Base44 (`base44/entities/Solicitud.jsonc`, formulario de contacto y panel de admin). Su CSV solo tiene cabeceras, así que no hay datos que importar. El modelo de destino es el del PRD §7; el **mapeo está aprobado** (29/10/2026).
+
+Cabeceras del CSV: `nombre, email, telefono, necesidad, microrelato_origen, servicio_interes, consentimiento, fecha, Creado, Última actualización, Creado por`. Los campos de sistema llevan etiquetas del panel en español, a diferencia de los demás CSV. El archivo tiene BOM y, al final, líneas vacías y una línea `,`.
 
 | Campo Base44 | Esquema B44 | Destino (PRD §7) |
 |---|---|---|
@@ -108,14 +115,19 @@ La entidad **existe** en Base44 (`base44/entities/Solicitud.jsonc`, formulario d
 
 Reglas B44: crear = cualquiera; leer, editar y borrar = solo admin.
 
-## Evento (`eventos`) — NO se importa
+**Columna `origen`**: está solo en `microrelatos` y `faqs` y marca el contenido de ejemplo importado de Base44. Vale `'base44_prueba'` en esos datos y NULL en el contenido propio o definitivo. `solicitudes_contacto` no la lleva.
+
+## User — implementación futura
+Sin panel de admin ni login en el MVP no hay roles: queda como implementación futura, pendiente de confirmación. `created_by_id` no se migra.
+
+## Evento (`eventos`) — NO se importa (implementación futura, pendiente de confirmación)
 - **Cabeceras**: `tipo, referencia, termino, fecha, id, created_date, updated_date, created_by_id, is_sample`.
 - **Qué registraba**: interacciones (`visita`, `busqueda`, `clic_servicio`, `clic_relato`, `solicitud`).
 - **Procedencia de los registros: no verificada.**
 - Hay tres decisiones separadas y pendientes: importar el historial, registrar eventos nuevos y elegir una analítica externa (ver `docs/BASE44_ANALYSIS.md` §7).
 
 ## Relaciones
-- `microrelatos.servicio_relacionado` → `servicios`: por nombre en Base44; por FK en Postgres, con el mapeo de "Wellcomy" pendiente de confirmación.
+- `microrelatos.servicio_relacionado` → `servicios`: por nombre en Base44; por FK en Postgres, aplicando el mapeo de "Wellcomy" → "Plataforma de extranjería".
 - `faqs.microrelatos_asociados` ↔ `microrelatos` N:M: por slug en Base44; tabla puente `microrelatos_faqs` en Postgres.
 - `solicitudes.servicio_interes` → nombre del servicio, y `solicitudes.microrelato_origen` → slug: por FK en Postgres.
 

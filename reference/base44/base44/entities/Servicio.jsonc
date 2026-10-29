@@ -1,0 +1,77 @@
+{
+  "name": "Servicio",
+  "type": "object",
+  "properties": {
+    "nombre": {
+      "type": "string",
+      "description": "Nombre p\u00fablico del servicio"
+    },
+    "descripcion": {
+      "type": "string",
+      "description": "Qu\u00e9 resuelve el servicio"
+    },
+    "tipo": {
+      "type": "string",
+      "description": "Propio, aliado o colaborador",
+      "enum": [
+        "propio",
+        "aliado",
+        "colaborador"
+      ]
+    },
+    "proveedor": {
+      "type": "string",
+      "description": "Wellcomy u otro proveedor"
+    },
+    "url_destino": {
+      "type": "string",
+      "description": "Enlace externo. Si est\u00e1 vac\u00edo, la solicitud se hace desde el formulario de contacto"
+    },
+    "comision_modelo": {
+      "type": "string",
+      "description": "Descripci\u00f3n comercial interna del acuerdo"
+    },
+    "estado": {
+      "type": "string",
+      "description": "Activo o inactivo",
+      "enum": [
+        "activo",
+        "inactivo"
+      ],
+      "default": "activo"
+    }
+  },
+  "required": [
+    "nombre",
+    "descripcion"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.estado": "activo"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

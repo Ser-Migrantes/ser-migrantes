@@ -1,11 +1,11 @@
 <!-- qué construimos y alcance del MVP -->
 
-# PRD — Ser Migrantes (MVP)
+# PRD — SeR MigranteS (MVP)
 
 Versión 0.3 · Basado en "Etapa 3: Tareas 3.1–3.8 (v0.3)" + decisiones del 28/10/2026 · Idioma: español
 
 ## 1. Resumen
-Ser Migrantes acompaña a personas migrantes en España en su integración social, laboral y económica. No es una web informativa tradicional ni un despacho: genera confianza y comunidad con microrelatos, resuelve dudas con FAQs y deriva a servicios.
+SeR MigranteS acompaña a personas migrantes en España en su integración social, laboral y económica. No es una web informativa tradicional ni un despacho: genera confianza y comunidad con microrelatos, resuelve dudas con FAQs y deriva a servicios.
 
 Propuesta de valor: ayudar a las personas migrantes a sentirse acompañadas, entender sus opciones y dar el siguiente paso, conectándolas con información clara, experiencias reales adaptadas y servicios adecuados.
 
@@ -28,24 +28,25 @@ Personas migrantes (trámites, regularización, integración) · personas que bu
 ### Incluido
 1. Landing con mensaje de marca y CTA.
 2. Listado de microrelatos (6 de prueba de Base44 como datos de arranque).
-3. Ficha `/microrelatos/[slug]` con FAQs asociadas y CTA.
-4. Página de FAQs con buscador y etiquetas (12 FAQs de prueba).
+3. Ficha `/historias/[slug]` con FAQs asociadas y CTA. El listado está en `/historias`. Sin redirecciones de rutas antiguas: la web de Base44 nunca fue pública.
+4. Página de FAQs (`/preguntas-frecuentes`) con buscador y etiquetas (12 FAQs de prueba).
 5. Página de servicios (4 servicios, ver §5).
 6. Formulario de contacto (ver §6) con consentimiento.
-7. Página `/privacidad` (política de privacidad, texto a validar) enlazada desde el formulario y el footer.
+7. Página `/privacidad` (política de privacidad, texto a validar). **Decisión provisional:** se crea pero **no es accesible** desde la web (sin enlaces ni sitemap; 404) hasta que haya datos oficiales y se retiren los textos "Texto pendiente de revisión legal". Ahora no puede hacerse accesible: faltan los datos del responsable y está llena de marcadores y avisos de borrador. **Riesgo abierto** mientras tanto: el formulario guarda datos sin política de privacidad accesible (§12).
 8. SEO básico: metadatos, slugs, sitemap, robots, datos estructurados.
-9. Páginas legales mínimas: aviso legal y cookies (provisionales).
+9. Páginas legales mínimas: aviso legal y cookies. Mismo tratamiento provisional que `/privacidad`: creadas, no accesibles.
 10. Analítica: pendiente de decisión (ver §10 y §11).
 
 ### Excluido del MVP
-Panel de administración y login (aplazado) · pasarela de pago · área privada de usuarios · gestión de expedientes · automatizaciones · CRM/ERP · app nativa · vídeos · buscador de pago por casuística (§8).
+Panel de administración, login, registro, OAuth y roles (entidad User): implementación futura pendiente de confirmación · registro propio de eventos (futuro pendiente de confirmación; probable analítica externa, §10) · modo oscuro (futuro pendiente de confirmación) · pasarela de pago · área privada de usuarios · gestión de expedientes · automatizaciones · CRM/ERP · app nativa · vídeos · buscador de pago por casuística (§8).
 
 ### Gestión de contenido sin panel
 El contenido (microrelatos, FAQs) se crea y edita desde el Table Editor de Supabase o con SQL. Todo contenido nuevo nace con `estado = 'borrador'` y solo se publica cuando lo apruebe la persona responsable (por definir). Retirar un relato = pasar su estado a `borrador`.
 
 ### Versión de demostración (decisión del 29/10/2026)
 El MVP se publica primero como **demostración**. Detalle en `docs/BASE44_ANALYSIS.md` §9.
-- **Contenido de ejemplo**: los 6 microrelatos y 12 FAQs de Base44 se importan con `estado = 'publicado'` (autorización expresa, excepción a la regla anterior) y `origen = 'base44_prueba'`. `origen` no tiene valor por defecto. No están verificados, no son testimonios reales y sus afirmaciones jurídicas no están aprobadas.
+- **Contenido de ejemplo**: los 6 microrelatos y 12 FAQs de Base44 se importan con `estado = 'publicado'` (autorización expresa, excepción a la regla anterior) y `origen = 'base44_prueba'`. No están verificados, no son testimonios reales y sus afirmaciones jurídicas no están aprobadas.
+- **Columna `origen`** en `microrelatos` y `faqs`: marca el contenido de ejemplo importado de Base44. Sin valor por defecto; `'base44_prueba'` en los datos de prueba y NULL en el contenido propio, revisado o definitivo. No se usa para clasificar solicitudes del formulario.
 - **Avisos visibles**:
   - aviso general de versión de demostración;
   - indicación de "contenido de ejemplo" en fichas de microrelatos y FAQs con `origen = 'base44_prueba'`;
@@ -57,11 +58,12 @@ El MVP se publica primero como **demostración**. Detalle en `docs/BASE44_ANALYS
   - sin lectura pública de las solicitudes ni registro de sus datos en logs;
   - medidas antispam (honeypot y límite básico de envíos).
   En desarrollo y comprobaciones se usan solo datos ficticios. La identidad del responsable y la política de privacidad quedan pendientes antes de abrir el formulario a consultas reales.
-- **Datos de negocio no confirmados** (teléfono, WhatsApp, forma societaria):
-  - no se publican y los botones de llamada y WhatsApp quedan desactivados;
-  - la marca es «Ser Migrantes»;
+- **Datos de negocio de prueba** (teléfono `+34 600 982 993`, WhatsApp y «SeR MigranteS S.L.»):
+  - se muestran con sus componentes y botones (Hero, aviso flotante de llamada y WhatsApp, pie);
+  - son datos de prueba hasta que se confirmen los oficiales o se confirme usar estos como oficiales;
+  - la marca es «SeR MigranteS»;
   - no se inventan NIF, domicilio, correo, precios, acuerdos ni credenciales.
-- **Paso a lanzamiento definitivo**: revisar, sustituir o aprobar los contenidos de ejemplo; retirar los avisos solo donde corresponda; aprobar los textos legales; confirmar los datos de negocio.
+- **Paso a lanzamiento definitivo**: revisar, sustituir o aprobar los contenidos de ejemplo; retirar los avisos solo donde corresponda; aprobar los textos legales y hacer accesibles sus páginas; confirmar o sustituir los datos de negocio de prueba.
 
 ## 5. Servicios del lanzamiento
 Los 4 servicios se cargan por migración de inserción (desde `reference/base44/Servicio_export.csv`), también en producción. `url_destino` pendiente de aportar. En la demostración se muestran con el aviso general, sin presentar su disponibilidad ni sus acuerdos como verificados.
@@ -75,7 +77,7 @@ Los 4 servicios se cargan por migración de inserción (desde `reference/base44/
 
 Etiquetas visibles en la UI: "Aliado de confianza", "Servicio propio – ServiR Migrantes", "Colaborador".
 
-**Modelo comercial (dato interno, PROVISIONAL, no confirmado).** Valores de `comision_modelo` en Base44. Se conservan, pero **no se publican ni pueden ser accesibles con la clave pública**: no basta con ocultarlos en la interfaz. El almacenamiento y los permisos se proponen en la Fase 2.
+**Modelo comercial (dato interno, PROVISIONAL, no confirmado).** Valores de `comision_modelo` en Base44. Se conservan, pero **no se publican ni pueden ser accesibles con la clave pública**: no basta con ocultarlos en la interfaz. Se guardan en la tabla privada `servicios_comisiones` (§7); cómo cargarlos sin dejarlos en el repositorio se detalla en `DATA_MODEL.md` (Fase 2).
 
 | Servicio | Proveedor | Modelo comercial (Base44) |
 |---|---|---|
@@ -83,6 +85,7 @@ Etiquetas visibles en la UI: "Aliado de confianza", "Servicio propio – ServiR 
 | Gestión documental | Gestorías colaboradoras | Derivación con comisión acordada por expediente. |
 | Orientación laboral | ServiR Migrantes | Servicio propio, sin comisión externa. |
 | Plataforma de extranjería | Wellcomy | Servicio del mismo grupo, comisionado internamente a través de Ser Migrantes. |
+
 
 ## 6. Formulario de contacto
 | Campo | Obligatorio | Notas |
@@ -92,9 +95,9 @@ Etiquetas visibles en la UI: "Aliado de confianza", "Servicio propio – ServiR 
 | Teléfono | No | |
 | Sobre qué servicio preguntas | No | Opciones: "Todavía no lo sé" (por defecto), Acompañamiento y traducción, Gestión documental, Orientación laboral, Plataforma de extranjería |
 | Cuéntanos qué necesitas | Sí | Texto libre; avisar de no incluir datos sensibles innecesarios |
-| Consentimiento | Sí | "Doy mi consentimiento para que Ser Migrantes use estos datos únicamente para responderme. No se comparten con terceros." |
+| Consentimiento | Sí | "Doy mi consentimiento para que SeR MigranteS use estos datos únicamente para responderme. No se comparten con terceros." |
 
-Botón: "Enviar mi mensaje". Texto bajo el botón: "Al enviar aceptas la política de privacidad" (enlace a `/privacidad`).
+Botón: "Enviar mi mensaje". Texto bajo el botón: "Al enviar aceptas la política de privacidad" (enlace a `/privacidad`). **Provisional**: mientras `/privacidad` no sea accesible, el texto va sin enlace y con una nota de que la política de privacidad está pendiente. Es un riesgo abierto (§12).
 Comportamiento: validación en cliente y servidor (Server Action), honeypot antispam, mensaje de éxito y de error claros. Si el usuario llega desde un microrelato, se guarda su origen.
 
 AVISO: el texto "No se comparten con terceros" debe ser coherente con la derivación a aliados/colaboradores (p. ej., Wellcomy). Si habrá que pasar datos a un tercero, el texto de consentimiento y la política de privacidad deben cambiar. Pendiente de validación jurídica.
@@ -104,13 +107,17 @@ Tablas y columnas en español, snake_case. Detalle completo en `docs/DATA_MODEL.
 
 **microrelatos**: id, titulo, slug (único), resumen, contenido, casuistica, perfil, etiquetas (text[]), estado ('borrador'|'publicado', por defecto 'borrador'), fecha_publicacion, cta_principal, servicio_relacionado_id (FK servicios, opcional), origen (texto, sin valor por defecto; 'base44_prueba' solo en los datos de arranque importados).
 
-Los IDs de Base44 no se conservan: se generan claves nuevas y las relaciones se reconstruyen por slug y por nombre de servicio (con el mapeo "Wellcomy" → "Plataforma de extranjería", pendiente de confirmación).
+Los IDs de Base44 no se conservan: se generan claves nuevas y las relaciones se reconstruyen por slug y por nombre de servicio, aplicando el mapeo "Wellcomy" → "Plataforma de extranjería".
 
-**faqs**: id, pregunta, respuesta, casuistica, etiquetas (text[]), estado, origen. N:M con microrelatos mediante `microrelatos_faqs`.
+**faqs**: id, pregunta (única: evita preguntas duplicadas y sirve de clave en la importación), respuesta, casuistica, etiquetas (text[]), estado, origen. N:M con microrelatos mediante `microrelatos_faqs`.
 
-**servicios**: id, nombre, descripcion, tipo ('aliado'|'propio'|'colaborador'), proveedor, url_destino (nullable), orden, estado ('activo'|'inactivo'). Sin columnas de comisión en la tabla pública. El modelo comercial (§5) se almacena sin acceso público, según la propuesta de la Fase 2.
+Estructura de `microrelatos` y `faqs`: **aprobada** el 29/10/2026 (`docs/BASE44_ANALYSIS.md` §5.1–5.2).
 
-**solicitudes_contacto**: id, nombre, email, telefono (nullable), servicio_interes_id (FK servicios, NULL = "todavía no lo sé"), mensaje, consentimiento (boolean, CHECK = true), microrelato_origen_id (nullable), created_at.
+**servicios** (estructura **aprobada**, `docs/BASE44_ANALYSIS.md` §5.3): id, nombre (único), descripcion, tipo ('aliado'|'propio'|'colaborador'), proveedor, url_destino (nullable), orden, estado ('activo'|'inactivo'). Tabla pública (solo lectura de activos), sin columnas de comisión.
+
+**servicios_comisiones** (privada, aprobada): servicio_id (FK servicios), comision_modelo, updated_at. Guarda el modelo comercial (§5). Solo es accesible desde Supabase (panel o clave secreta): RLS activada y sin políticas para el público.
+
+**solicitudes_contacto** (mapeo desde Base44 **aprobado**): id, nombre, email, telefono (nullable), servicio_interes_id (FK servicios, NULL = "todavía no lo sé"), mensaje, consentimiento (boolean, CHECK = true), microrelato_origen_id (nullable), created_at. Sin `origen`.
 
 Seguridad: RLS siempre. Público lee solo publicado/activo. `solicitudes_contacto`: solo INSERT anónimo, sin SELECT. Las solicitudes se consultan en el panel de Supabase.
 
@@ -138,14 +145,16 @@ Objetivo: visitas, microrelatos vistos, FAQs consultadas, clics a servicios, for
 4. Analítica: ¿Google Analytics, Vercel Analytics o ninguna al inicio?
 5. URLs de destino de cada servicio.
 6. Texto definitivo de política de privacidad, aviso legal y cookies; responsable del tratamiento y email de contacto/retirada.
-7. Dominio: sermigrantes.es (principal), sermigrante redirige. Titular del dominio y cuándo se conecta.
-8. Tipografías definitivas (la paleta se extrae del código de Base44).
+7. Dominio: sermigrantes.es (principal), sermigrante redirige. Se conectará en breve (29/10/2026); titular del dominio por confirmar.
+8. Tipografías: se mantienen las de Base44 (Fraunces e Inter) hasta que se pida cambiarlas. La paleta se extrae del código de Base44.
 9. Si se mantiene "No se comparten con terceros" dado el modelo de derivación.
-10. Panel de administración (admin único/varios): aplazado.
+10. Panel de administración, login, OAuth y roles (admin único/varios): implementación futura pendiente de confirmación.
+11. Datos de negocio oficiales (teléfono, WhatsApp, forma societaria): ahora se muestran los de Base44 como datos de prueba.
 
 ## 12. Riesgos
 - Publicar microrelatos de prueba sin revisión de privacidad, consentimiento y verdad de los contenidos.
 - Mezclar información general con asesoramiento jurídico (ojo con la descripción del servicio de extranjería: "IA legal").
 - Contradicción entre consentimiento ("no se comparten") y derivación a terceros.
+- El formulario guarda datos en público mientras la política de privacidad no es accesible (decisión provisional §4 y §6).
 - Sin panel ni aviso por email, las solicitudes pueden pasar desapercibidas.
 - Límites del plan gratuito de Supabase (pausa por inactividad) y condiciones de uso comercial de Vercel Hobby: verificar antes del lanzamiento.

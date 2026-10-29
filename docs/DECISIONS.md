@@ -98,3 +98,86 @@ Trazabilidad de planes aprobados y ejecutados durante la creación de SeR Migran
   5. Confirmados el resto del resumen, el commit y el push.
 - **Estado:**
   - Ejecutado: ajustes documentales. Commit `0f3f363` subido a `origin/main` (`2551743..0f3f363 main -> main`). Fase 1 cerrada; la Fase 2 no se ha iniciado.
+
+### [2026-10-29] Fase 1 — Nuevas fuentes y decisiones previas a la Fase 2
+- **Qué se aprobó:**
+  - **Fuentes aportadas por ti**: `Servicio.jsonc`; cabeceras originales en `Solicitud_export.csv`; imágenes AVIF de Hero y Cierre de contacto en `reference/images/`.
+  - **Imágenes**: copiarlas al proyecto. La decisión pendiente pasa a «integrar las `.avif` existentes y verificar visualización, peso y compatibilidad». El favicon será el logo. La imagen de reserva de Base44 se ignora.
+  - **Rutas**: `/historias`, `/historias/[slug]` y `/preguntas-frecuentes`, sin redirecciones (la web de Base44 nunca fue pública).
+  - **Implementación futura, solo con tu confirmación expresa**: admin, login, registro, OAuth, `AuthContext` y entidad User; registro de eventos (opción probable: 7.3, analítica externa); modo oscuro.
+  - **Otras decisiones**:
+    - `integrations.*` se ignora;
+    - tipografías Fraunces e Inter hasta nuevo aviso;
+    - `logo.png` en lugar de `BrandMark`.
+  - **Esquema**:
+    - estructura de `microrelatos` y `faqs` **aprobada**, con sus restricciones más estrictas que Base44;
+    - mapeo de `solicitudes_contacto` **aprobado**;
+    - `origen` en `microrelatos`, `faqs` y `solicitudes_contacto` (NULL en contenido propio o definitivo);
+    - `servicios` analizado con `Servicio.jsonc`, **pendiente de tu aprobación**.
+  - **Wellcomy**:
+    - primero pediste no aplicar el mapeo y mantener "Wellcomy" tal cual;
+    - al señalarte que la clave foránea aprobada no puede guardar un nombre que no es de un servicio, **decidiste mantener el mapeo** "Wellcomy" → "Plataforma de extranjería";
+    - se aplicará en la importación.
+  - **Datos de negocio**:
+    - teléfono, WhatsApp, aviso flotante y «© SeR MigranteS S.L.» **se muestran como datos de prueba** hasta confirmar los oficiales;
+    - esto sustituye la decisión anterior de omitirlos y de no mostrar la forma societaria. Respondiste «Con S.L. como prueba».
+  - **Dominio**: se conectará en breve.
+  - **Marca**: «SeR MigranteS» en textos, metadatos y documentación.
+  - Se mantiene que `comision_modelo` no se publica y que no se inventan NIF, domicilio, correo, precios, acuerdos ni credenciales.
+  - **Textos legales**: las páginas se crean con los textos tal como estaban, pero **no son accesibles** (provisional). El formulario muestra el texto de privacidad **sin enlace**, con nota de política pendiente (respondiste «Texto sin enlace»).
+  - **Textos de interfaz**: «de 0» → «de cero».
+- **Archivos creados/modificados:**
+  - `public/images/3271a1ce3_generated_image.avif` y `public/images/42995b94b_generated_image.avif` (copias de `reference/images/`);
+  - `src/app/layout.tsx` (título) y `src/app/page.tsx` (`alt` y `h1`): marca «SeR MigranteS»;
+  - `docs/BASE44_ANALYSIS.md` (reescrito con las nuevas fuentes y decisiones), `reference/base44/tablas.md`, `docs/PRD.md`, `docs/PLAN.md`, `docs/TASKS.md`, `CLAUDE.md` y `docs/DECISIONS.md`.
+  - Tus aportaciones (`Servicio.jsonc`, `Solicitud_export.csv`, `reference/images/*.avif`) no se han modificado.
+- **Decisiones tomadas (por Claude, para tu revisión):**
+  - **Hallazgo**: en Base44, `comision_modelo` era legible públicamente en los servicios activos, porque la regla de lectura se aplicaba a la fila entera.
+  - **Propuesta de `servicios`**: `nombre` único (clave natural de la importación); `tipo` y `proveedor` obligatorios (más estrictos que Base44; los 4 registros cumplen); `orden`; sin `origen`.
+  - **Discrepancias de `Solicitud_export.csv`**: BOM, etiquetas de sistema en español y líneas finales sobrantes (una con solo `,`). Solo se documentan; no se importa nada.
+  - **`CLAUDE.md`**: la línea 5 decía «microrelatos (casos reales adaptados)» y contradecía la regla de los datos de prueba. Se corrige a «ejemplos de casos para prueba en el MVP».
+  - **PRD §5**: el valor de `comision_modelo` de Wellcomy («…a través de Ser Migrantes») se deja literal, porque es un dato del CSV.
+  - **El historial de este archivo** conserva la grafía «Ser Migrantes» de entradas anteriores.
+  - **Pendientes nuevos**: logo para el fondo oscuro del pie (solo existe la versión *light*); `og:image` en PNG o JPG (muchas redes no admiten AVIF); cómo marcar `origen` en solicitudes de prueba frente a reales; riesgo de que el formulario guarde datos sin política de privacidad accesible.
+- **Estado:**
+  - Ejecutado: cambios documentales, copia de imágenes y cambio de marca en `layout.tsx` y `page.tsx`. `typecheck`, `lint` y `build` OK en la raíz.
+  - Pendiente: tu revisión; commit y push no realizados.
+
+### [2026-10-29] Fase 1 — Esquema de servicios, comisiones privadas, imágenes PNG y riesgo legal
+- **Qué se aprobó:**
+  1. Estructura de `servicios` (`BASE44_ANALYSIS.md` §5.3).
+  2. Para el bloque A de la Fase 2:
+     - `pregunta` como clave única de `faqs`, para evitar preguntas duplicadas;
+     - `comision_modelo` en una tabla separada y privada, `servicios_comisiones` (`servicio_id`, `comision_modelo`, `updated_at`), accesible solo desde Supabase; `servicios` es pública;
+     - **cambio**: `origen` solo marca el contenido de ejemplo importado de Base44 y **no** se usa para clasificar las solicitudes del formulario. Se quita de `solicitudes_contacto`, lo que sustituye la decisión anterior de añadirlo allí.
+  3. Para la Fase 4:
+     - en el pie se mantiene el icono de Base44 (`BrandMark`), porque el logo actual no tiene contraste sobre fondo oscuro; queda pendiente que aportes un logo para fondos oscuros;
+     - se usan las imágenes **PNG** que aportaste en lugar de las AVIF, y se eliminan las AVIF de `reference/images/`.
+  4. El riesgo de que el formulario guarde datos sin política de privacidad accesible se documenta junto a la decisión provisional de no hacer accesibles las páginas legales. No pueden activarse aún: faltan los datos y están llenas de marcadores y avisos de borrador.
+- **Archivos creados/modificados:**
+  - eliminados `reference/images/*.avif` (por tu indicación) y `public/images/*.avif` (copias mías, sin commitear);
+  - copiados `reference/images/*.png` a `public/images/`;
+  - `docs/BASE44_ANALYSIS.md`, `docs/PRD.md`, `docs/PLAN.md`, `docs/TASKS.md`, `CLAUDE.md`, `reference/base44/tablas.md` y `docs/DECISIONS.md`.
+- **Decisiones tomadas (por Claude, para tu revisión):**
+  - **Nombre de la tabla**: tu mensaje usa `servicios_comisiones` y `servicio_comisiones`; se documenta `servicios_comisiones` (la primera grafía, en plural como `servicios`).
+  - **Clave primaria**: la de `servicios_comisiones` (p. ej. `servicio_id`, relación 1:1) y cómo cargar los valores sin dejarlos en el repositorio se concretan en `DATA_MODEL.md`.
+  - **Peso de los PNG**: 1,1 y 1,8 MB (frente a 79 y 224 KB en AVIF). Se propone servirlos con `next/image`, que genera versiones optimizadas, y verificarlo en la Fase 4 junto con los límites del plan gratuito de Vercel. El PNG de Hero sirve para `og:image`, así que ese pendiente queda resuelto.
+  - **Importación**: habrá que comprobar que las 12 preguntas del CSV son distintas antes de aplicar `unique`.
+- **Estado:**
+  - Ejecutado: cambios documentales y sustitución de imágenes.
+  - Pendiente: tu revisión; commit y push no realizados.
+
+### [2026-10-29] Fase 1 — `next/image` y commit de las decisiones previas a la Fase 2
+- **Qué se aprobó:**
+  - Servir las imágenes PNG con `next/image`; se implementa en la Fase 4.
+  - Commit y push a `origin/main` de los cambios de las tres entradas anteriores del 29/10/2026, si las verificaciones siguen pasando.
+- **Archivos creados/modificados:**
+  - `docs/BASE44_ANALYSIS.md` (§8.4 y §10);
+  - `docs/PLAN.md` (Fase 4);
+  - `docs/DECISIONS.md`.
+- **Decisiones tomadas:**
+  - No se ha cambiado código: `next/image` queda documentado para la Fase 4, que es donde se integran las imágenes.
+  - Sin respuesta sobre el nombre de la tabla, se mantiene `servicios_comisiones`.
+- **Estado:**
+  - Ejecutado: cambios documentales.
+  - Pendiente: verificaciones, commit y push (el push se registra solo si termina bien).

@@ -1,8 +1,8 @@
 <!-- Reglas permanentes -->
 
-# Ser Migrantes — MVP web
+# SeR MigranteS — MVP web
 
-Plataforma en español que acompaña a personas migrantes en España: microrelatos (casos reales adaptados), FAQs, servicios y contacto. Objetivo del MVP: validar confianza, tráfico SEO y contactos con coste cero o mínimo.
+Plataforma en español que acompaña a personas migrantes en España: microrelatos (ejemplos de casos para prueba en el MVP), FAQs, servicios y contacto. Marca: «SeR MigranteS». Objetivo del MVP: validar confianza, tráfico SEO y contactos con coste cero o mínimo.
 
 ## Stack (no añadir nada fuera de esto sin pedir permiso)
 - Next.js (App Router) + TypeScript estricto + Tailwind CSS.
@@ -43,9 +43,11 @@ Plataforma en español que acompaña a personas migrantes en España: microrelat
 - RLS activado en TODAS las tablas. Público: solo SELECT de contenido con `estado = 'publicado'` (microrelatos, faqs) y servicios `activo`. `solicitudes_contacto`: solo INSERT para público, sin SELECT público. No crear políticas de escritura para usuarios anónimos en otras tablas.
 - Datos personales mínimos: no registrar datos del formulario en logs ni en consola; consentimiento explícito obligatorio.
 - Los microrelatos son ejemplos de casos para prueba. No son reales, pero se usarán para este MVP; los reales se subirán más adelante y se eliminarán los de prueba (fuera de las fases actuales). No inventar casos, cifras ni datos legales.
-- Los datos de Base44 (6 microrelatos, 12 FAQs) son de PRUEBA y se cargan como datos de arranque con `origen = 'base44_prueba'` (no es valor por defecto). No tratarlos como contenido aprobado. Se publican en la versión de DEMOSTRACIÓN con avisos visibles y sin presentarlos como casos reales (ver `docs/PRD.md` §4). Antes del lanzamiento definitivo deben revisarse y sustituirse o aprobarse.
+- Los datos de Base44 (6 microrelatos, 12 FAQs) son de PRUEBA y se cargan como datos de arranque con `origen = 'base44_prueba'` (no es valor por defecto). `origen` existe solo en `microrelatos` y `faqs` y marca el contenido de ejemplo importado; el contenido propio, revisado o definitivo lleva `origen` NULL. No se usa para clasificar solicitudes. No tratarlos como contenido aprobado. Se publican en la versión de DEMOSTRACIÓN con avisos visibles y sin presentarlos como casos reales (ver `docs/PRD.md` §4). Antes del lanzamiento definitivo deben revisarse y sustituirse o aprobarse.
 - El modo demostración afecta solo al contenido de ejemplo (microrelatos, FAQs, servicios). El formulario es real también en la versión pública: guarda en `solicitudes_contacto` mediante Server Action; nunca se sustituye por un envío simulado. En desarrollo y comprobaciones, usar solo datos ficticios.
-- No publicar datos de negocio no confirmados (teléfono, WhatsApp, forma societaria).
+- Los datos de contacto de Base44 (teléfono, WhatsApp, «SeR MigranteS S.L.») se muestran como DATOS DE PRUEBA hasta que se confirmen los oficiales o se confirme usar estos. No inventar NIF, domicilio, correo, precios, acuerdos comerciales ni credenciales. `comision_modelo` nunca es público: vive en la tabla privada `servicios_comisiones` (RLS sin políticas públicas).
+- Las páginas legales (`/privacidad`, `/aviso-legal`, `/cookies`) existen pero NO son accesibles (provisional) hasta recibir los datos oficiales y la orden de retirar "Texto pendiente de revisión legal".
+- No implementar sin confirmación expresa: admin, login, registro, OAuth, roles (User), registro de eventos, modo oscuro.
 - La web ofrece información general y derivación, NO asesoramiento jurídico.
 
 ## Cómo trabajar
